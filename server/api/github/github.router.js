@@ -7,11 +7,6 @@ const {AuthGuard} = require("../../lib/auth-guard.middleware");
 
 app.use(bodyParser.json())
 
-function onPush(repo) {
-  const {working_dir: cwd, script,name} = repo;
-  ExecService.execute(name,script,cwd);
-}
-
 // public route
 app.post('/webhook', (req, res) => {
   const {body} = req;
@@ -19,7 +14,7 @@ app.post('/webhook', (req, res) => {
   const repo = GithubService.getRepositoryByName(repoName);
   if (repo) {
     res.status(200).send('ok');
-    onPush(repo);
+    GithubService.onPush(repo);
   }else{
     res.status(404).send('repository not found!')
   }
@@ -59,7 +54,7 @@ app.get('/history/:name/:id', (req, res) => {
 app.get('/:name', (req, res) => {
   const {name} = req.params;
   const repo = GithubService.getRepositoryByName(name);
-  onPush(repo);
+  GithubService.onPush(name);
   res.json(repo)
 })
 

@@ -1,7 +1,10 @@
 const Fson = require('fson-db');
 const {join} = require("path");
+const {ExecService} = require("./exec.service");
 const dbPath = join(__dirname, '../../../data/repositories');
 const db = Fson(dbPath);
+// todo implement better lock mechanism
+const lock = {};
 module.exports.GithubService = {
   repositories: db,
   getRepositoryByName(repoName) {
@@ -16,5 +19,23 @@ module.exports.GithubService = {
   deleteRepository(name) {
     db[name] = null;
     delete db[name];
+  },
+  async onPush(name) {
+    const repo = this.getRepositoryByName(name);
+    const {working_dir: cwd, script} = repo;
+    while (lock[name]){
+      console.log('waiting for existing exec to finish ...');
+      await new Promise(r => setTimeout(r, 5000));
+    }
+    try {
+      console.log('start exec');
+      lock[name] = true;
+      await ExecService.execute(name, script, cwd);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      console.log('done with exec');
+      lock[name] = false;
+    }
   }
 }
