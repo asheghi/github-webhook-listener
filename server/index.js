@@ -48,6 +48,9 @@ async function startServer() {
 
   app.listen(port,hostname,() => {
     console.log(`Server running at http://${hostname}:${port}`);
-    process.send('ready');
+    try {
+      process.send('ready');
+    } catch (e) {
+    }
   })
 }
