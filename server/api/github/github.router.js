@@ -8,14 +8,14 @@ const {AuthGuard} = require("../../lib/auth-guard.middleware");
 app.use(bodyParser.json())
 
 // public route
-app.post('/webhook', (req, res) => {
+app.post('/webhook', async (req, res) => {
   const {body} = req;
   const repoName = body.repository.name;
   const repo = GithubService.getRepositoryByName(repoName);
   if (repo) {
+    await GithubService.onPush(repoName);
     res.status(200).send('ok');
-    GithubService.onPush(repo);
-  }else{
+  } else {
     res.status(404).send('repository not found!')
   }
 })
