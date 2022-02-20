@@ -13,8 +13,8 @@ app.post('/webhook', async (req, res) => {
   const repoName = body.repository.name;
   const repo = GithubService.getRepositoryByName(repoName);
   if (repo) {
+    res.status(200).json('ok');
     await GithubService.onPush(repoName);
-    res.status(200).send('ok');
   } else {
     res.status(404).send('repository not found!')
   }
