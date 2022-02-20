@@ -1,0 +1,147 @@
+<template>
+  <div class="new-repo">
+    <form @submit.prevent.stop="submit">
+      <div class="form-group">
+        <label
+            for="name"
+            class="form-label"
+        >Repository Name</label>
+        <input
+            id="name"
+            v-model="form.name"
+            :disabled="loading"
+            type="text"
+            class="input"
+            placeholder="enter the name"
+        >
+      </div>
+      <div class="form-group">
+        <label
+            for="name"
+            class="form-label"
+        >Working Directory</label>
+        <input
+            id="dir"
+            v-model="form.working_dir"
+            :disabled="loading"
+            type="text"
+            class="input"
+            placeholder="enter the path to execute scripts from"
+        >
+      </div>
+      <div class="form-group">
+        <label
+            for="script"
+            class="form-label"
+        >Script Steps</label>
+        <div class="flex bg-primary items-center rounded overflow-hidden" v-for="index in linesCount" :key="index">
+          <div
+              class="index rounded w-8 text-white  flex justify-center items-center h-8 bg-primary text-gray-500"
+              v-text="index">
+
+          </div>
+          <input
+              id="script"
+              v-model="form.script[index - 1]"
+              :disabled="loading"
+              type="text"
+              class="input"
+              placeholder=""
+          >
+        </div>
+        <div class="flex justify-around">
+          <div class="text-center cursor-pointer " @click="linesCount++">
+            more line
+          </div>
+          <div class="text-center cursor-pointer " @click="onLessLine">
+            less lines
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button
+            type="submit"
+            class="button"
+            :disabled="loading"
+            :class="{loading}"
+        >
+          {{ loading ? 'Processing ...' : 'Save' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</template>
+<script>
+import {ax} from "../../lib/plugins/axios";
+
+export default {
+  name: 'NewRepo',
+  data() {
+    return {
+      loading: false,
+      form: {
+        name: '',
+        script: [],
+        working_dir:'',
+      },
+      linesCount: 4,
+    }
+  },
+  methods: {
+    setRepo(repo) {
+      this.form = {...repo};
+      this.linesCount = this.form.script.length + 1;
+    },
+    onLessLine() {
+      if (this.linesCount < 3) return;
+      this.linesCount--;
+      this.form.script.length = this.linesCount
+    },
+    async submit() {
+      const {name, script,working_dir} = this.form;
+      if (!(name && working_dir)) return;
+      if (!(script && script.length)) return;
+      const {status, data} = await ax.post('github/repository/save',this.form);
+      if (status === 200) {
+        this.$emit('save',data);
+      }
+    }
+  }
+}
+</script>
+<style lang="scss">
+.new-repo {
+  @apply p-4;
+  min-width: 400px;
+  max-width: 500px;
+
+  .form-group {
+    @apply flex flex-col py-2 gap-2 ;
+    .form-label {
+      @apply text-xs opacity-50;
+    }
+
+    input {
+      @apply w-full px-2 bg-gray-100 py-1 border rounded border-gray-300 ring-0 outline-primary;
+    }
+
+    .button {
+      @apply border border-primary transition bg-primary text-white px-4 py-1 rounded text-lg
+      font-bold;
+      &:hover, &:focus {
+        @apply bg-white text-primary border border-primary;
+      }
+
+      &:active {
+        @apply scale-90;
+      }
+
+      &.loading {
+        @apply bg-primary text-white border border-primary opacity-50;
+        @apply scale-100;
+      }
+    }
+  }
+}
+
+</style>
