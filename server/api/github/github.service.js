@@ -14,6 +14,7 @@ module.exports.GithubService = {
     return Object.keys(db).map(key => db[key])
   },
   deleteRepository(name) {
+    db[name] = null;
     delete db[name];
   }
 }

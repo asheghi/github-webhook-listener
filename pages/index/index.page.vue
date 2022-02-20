@@ -1,23 +1,58 @@
 <template>
-  <div class="min-h-screen flex flex-col justify-center items-center gap-8">
-    <RepoList @select="onSelect" ref="list"/>
-    <NewRepo @save="onSave" ref="edit"/>
+  <div class="IndexPage min-h-screen flex flex-col pt-8 items-center gap-8">
+    <div class="top mb-4 flex items-center w-full">
+      <h1 class="mr-auto">Repositories</h1>
+      <button @click="showNewRepo" class="btn add-repo">
+        Add Repo
+      </button>
+    </div>
+    <RepoList @edit="onEdit" ref="list"/>
+    <Modal :title="'Repository'" ref="modal">
+      <NewRepo @close="$refs.modal.hide()" @delete="deleteRepo" @save="onSave" ref="edit"/>
+    </Modal>
   </div>
 </template>
 
 <script>
 import RepoList from "./RepoList.vue";
 import NewRepo from "./EditRepo.vue";
+import Modal from "../../components/modal.vue";
+import {ax} from "../../lib/plugins/axios";
 
 export default {
-  components: {NewRepo, RepoList},
+  components: {Modal, NewRepo, RepoList},
   methods: {
     onSave() {
       this.$refs.list.fetchRepos();
+      this.$refs.modal.hide();
     },
-    onSelect(repo) {
-      this.$refs.edit.setRepo(repo);
+    async onEdit(repo) {
+      this.$refs.modal.show();
+      await this.$nextTick();
+      this.$refs.edit.setRepo(repo, true);
+    },
+    async showNewRepo() {
+      this.$refs.modal.show();
+      await this.$nextTick();
+      this.$refs.edit.setRepo({});
+    },
+    async deleteRepo(name) {
+      const {data, status} = await ax.delete('github/repository/' + name);
+      if (status === 200) {
+        this.$refs.modal.hide();
+        await this.$refs.list.fetchRepos();
+      }
     }
   }
 }
 </script>
+<style lang="scss">
+.IndexPage {
+  max-width: 500px;
+  min-width: 400px;
+  @apply mx-auto;
+  .btn {
+    @apply hover:text-white hover:bg-primary rounded transition px-2 py-1;
+  }
+}
+</style>

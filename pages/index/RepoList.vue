@@ -1,13 +1,10 @@
 <template>
-  <div class="list-repos">
-    <div class="text-lg">Repositories</div>
-    <div class="repo flex" v-for="repo in repos" :key="repo.name"
-    @click="onSelect(repo)">
-      <div class="title" v-text="repo.name"/>
-      <div class="re-run" v-text="ReRun">
-
-      </div>
-      <a :href="'/history/' + repo.name" class="history ml-auto text-primary">
+  <div class="list-repos w-full">
+    <div class="repo flex gap-4" v-for="repo in repos" :key="repo.name">
+      <div class="title mr-auto" v-text="repo.name"/>
+      <div class="re-run" v-text="ReRun"></div>
+      <div class="edit cursor-pointer text-primary" @click="onEdit(repo)" v-text="'Edit'"></div>
+      <a :href="'/history/' + repo.name" class="history text-primary">
         History
       </a>
     </div>
@@ -33,8 +30,8 @@ export default {
       const {data, status} = await ax('github/repository/all');
       this.repos = data;
     },
-    onSelect(repo) {
-      this.$emit('select',repo);
+    onEdit(repo) {
+      this.$emit('edit',repo);
     }
   }
 }
@@ -42,10 +39,8 @@ export default {
 <style lang="scss">
 .list-repos{
   min-width: 400px;
-  @apply p-4;
-
   .repo{
-    @apply px-4 py-1 border border-gray-200 rounded mb-2;
+    @apply text-xl py-1 rounded mb-2;
   }
 }
 </style>

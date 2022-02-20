@@ -3,6 +3,7 @@ const app = express.Router();
 const bodyParser = require("body-parser");
 const {GithubService} = require("./github.service");
 const {ExecService} = require("./exec.service");
+const {AuthGuard} = require("../../lib/auth-guard.middleware");
 
 app.use(bodyParser.json())
 
@@ -11,6 +12,20 @@ function onPush(repo) {
   ExecService.execute(name,script,cwd);
 }
 
+// public route
+app.post('/webhook', (req, res) => {
+  const {body} = req;
+  const repoName = body.repository.name;
+  const repo = GithubService.getRepositoryByName(repoName);
+  if (repo) {
+    res.status(200).send('ok');
+    onPush(repo);
+  }else{
+    res.status(404).send('repository not found!')
+  }
+})
+
+app.use(AuthGuard)
 
 app.post('/repository/save',(req,res) => {
   const {name,script,working_dir} = req.body;
@@ -23,23 +38,13 @@ app.get('/repository/all',(req,res) => {
   res.json(repositories);
 })
 
-app.delete('/repository/delete',(req,res) => {
-  const {name} = req.body;
+app.delete('/repository/:name',(req,res) => {
+  const {name} = req.params;
+  if (!name ) return res.status(422).send('no name');
   GithubService.deleteRepository(name)
   res.send('ok');
 })
 
-app.post('/webhook', (req, res) => {
-  const {body} = req;
-  const repoName = body.repository.name;
-  const repo = GithubService.getRepositoryByName(repoName);
-  if (repo) {
-    res.status(200).send('ok');
-    onPush(repo);
-  }else{
-    res.status(404).send('repository not found!')
-  }
-})
 
 app.get('/history/:name', (req, res) => {
   const {name} = req.params;

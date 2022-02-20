@@ -2,6 +2,7 @@ const express = require('express')
 const compression = require('compression')
 const { createPageRenderer } = require('vite-plugin-ssr')
 const {ApiRouter} = require("./api");
+const {AuthGuard} = require("./lib/auth-guard.middleware");
 
 const isProduction = process.env.NODE_ENV === 'production'
 const root = `${__dirname}/..`
@@ -14,6 +15,8 @@ async function startServer() {
   app.use(compression());
 
   app.use('/api',ApiRouter);
+
+  app.use(AuthGuard)
 
   let viteDevServer
   if (isProduction) {

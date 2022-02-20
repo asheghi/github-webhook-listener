@@ -1,5 +1,15 @@
 <template>
   <div class="new-repo">
+    <div class="head mb-4 flex gap-4 items-center">
+      <h4 class="text-lg mr-auto" v-text="'Respsitory'"/>
+      <button
+          v-if="editMode"
+          @click="$emit('delete',this.form.name)"
+          class="delete"
+          v-text="'Delete'"
+      />
+<!--      <div @click="$emit('close')" class="close">Close</div>-->
+    </div>
     <form @submit.prevent.stop="submit">
       <div class="form-group">
         <label
@@ -9,7 +19,7 @@
         <input
             id="name"
             v-model="form.name"
-            :disabled="loading"
+            :disabled="loading || editMode"
             type="text"
             class="input"
             placeholder="enter the name"
@@ -36,7 +46,7 @@
         >Script Steps</label>
         <div class="flex bg-primary items-center rounded overflow-hidden" v-for="index in linesCount" :key="index">
           <div
-              class="index rounded w-8 text-white  flex justify-center items-center h-8 bg-primary text-gray-500"
+              class="index text-white rounded w-8 text-white  flex justify-center items-center h-8 bg-primary"
               v-text="index">
 
           </div>
@@ -82,15 +92,21 @@ export default {
       form: {
         name: '',
         script: [],
-        working_dir:'',
+        working_dir: '',
       },
       linesCount: 4,
+      editMode: false,
     }
   },
   methods: {
-    setRepo(repo) {
-      this.form = {...repo};
-      this.linesCount = this.form.script.length + 1;
+    getEditMode() {
+      alert('called')
+      return this.editMode;
+    },
+    setRepo(repo, editMode) {
+      this.editMode = editMode
+      this.form = {...this.form, ...repo};
+      if (this.form.script) this.linesCount = this.form.script.length + 1;
     },
     onLessLine() {
       if (this.linesCount < 3) return;
@@ -98,12 +114,12 @@ export default {
       this.form.script.length = this.linesCount
     },
     async submit() {
-      const {name, script,working_dir} = this.form;
+      const {name, script, working_dir} = this.form;
       if (!(name && working_dir)) return;
       if (!(script && script.length)) return;
-      const {status, data} = await ax.post('github/repository/save',this.form);
+      const {status, data} = await ax.post('github/repository/save', this.form);
       if (status === 200) {
-        this.$emit('save',data);
+        this.$emit('save', data);
       }
     }
   }
@@ -114,6 +130,9 @@ export default {
   @apply p-4;
   min-width: 400px;
   max-width: 500px;
+  .delete{
+    @apply transition rounded px-2 py-1 hover:text-white  text-red-400 hover:bg-red-500;
+  }
 
   .form-group {
     @apply flex flex-col py-2 gap-2 ;
