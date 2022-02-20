@@ -13,8 +13,8 @@ async function render(pageContext) {
 
   // See https://vite-plugin-ssr.com/head
   const { documentProps } = pageContext
-  const title = (documentProps && documentProps.title) || 'Vite SSR app'
-  const desc = (documentProps && documentProps.description) || 'App using Vite + vite-plugin-ssr'
+  const title = (documentProps && documentProps.title) || 'Github WebHook Listener'
+  const desc = (documentProps && documentProps.description) || 'github webhook listener'
 
   const documentHtml = escapeInject`<!DOCTYPE html>
     <html lang="en">
