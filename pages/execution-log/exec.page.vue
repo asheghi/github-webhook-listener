@@ -4,19 +4,15 @@
     <div class="mb-4">{{ data.date }}</div>
     <div class="exec" v-for="(val,key) in data.exec">
       <div class="text-lg font-bold">{{ key }}</div>
-      <div class="stdout">
+      <div class="stdout" v-if="val.stdout">
         <pre>
-          <code>
-            {{ val.stdout }}
-          </code>
+          <code>{{ val.stdout }}</code>
         </pre>
       </div>
-      <div class="stderr text-red-500">
-        <pre><code>
-          {{ val.stderr }}
-        </code></pre>
+      <div class="stderr text-red-500" v-if="val.stderr">
+        <pre><code>{{ val.stderr }}</code></pre>
       </div>
-      <div class="err text-red-700">
+      <div class="err text-red-700" v-if="val.err">
         <pre><code>{{ val.err }}</code></pre>
       </div>
     </div>
