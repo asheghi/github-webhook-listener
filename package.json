@@ -22,9 +22,7 @@
     "shelljs": "^0.8.5",
     "vite": "^2.8.1",
     "vite-plugin-ssr": "^0.3.56",
-    "vue": "^3.2.31"
-  },
-  "devDependencies": {
+    "vue": "^3.2.31",
     "autoprefixer": "^10.4.2",
     "dotenv-cli": "^5.0.0",
     "postcss": "^8.4.6",
