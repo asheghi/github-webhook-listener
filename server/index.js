@@ -46,6 +46,8 @@ async function startServer() {
   const port = +(process.env.PORT || 8585);
   const hostname = process.env.HOST || "0.0.0.0";
 
-  app.listen(port)
-  console.log(`Server running at http://${hostname}:${port}`)
+  app.listen(port,hostname,() => {
+    console.log(`Server running at http://${hostname}:${port}`);
+    process.send('ready');
+  })
 }
