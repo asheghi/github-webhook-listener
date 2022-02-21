@@ -18,7 +18,7 @@ module.exports.ExecService = {
     for (let i = 0; i < script.length; i++) {
       const command = script[i];
       const cmd_id = new Date().getTime();
-      db[id].exec[cmd_id] = {cmd: command,status:'running'};
+      db[id].exec[cmd_id] = {cmd: command, status: 'running', time: new Date().getTime()};
       const historyCommand = db[id].exec[cmd_id];
       const cmdStartDate = new Date().getTime();
       try {

@@ -15,7 +15,7 @@ app.post('/webhook', async (req, res) => {
   const msg = body.commits.map(it => it.message).join(', ')
   if (repo) {
     res.status(200).json('ok');
-    await GithubService.onPush({name, msg, body});
+    await GithubService.onPush({name, msg, extra:body});
   } else {
     res.status(404).send('repository not found!')
   }
