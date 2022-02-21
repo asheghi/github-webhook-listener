@@ -69,6 +69,7 @@ export default {
     height: auto;
     display: block;
     max-height: 50vh;
+    overflow-y: auto;
   }
 }
 svg {
