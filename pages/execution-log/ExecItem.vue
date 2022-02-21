@@ -20,7 +20,7 @@
         </template>
       </div>
     </div>
-    <div class="details" :class="{show}">
+    <div class="details px-4 flex flex-col gap-4" :class="{show}">
       <div class="text-xs text-gray-500 py-2">Details</div>
       <div class="py-4" v-if="(String(val.stdout) + String(val.stderr) + String(val.err)) === 'null'">
         <pre><code>no output</code></pre>
@@ -34,6 +34,7 @@
       <div class="err text-red-700" v-if="val.err">
         <pre><code>{{ val.err }}</code></pre>
       </div>
+      <div class="mb-4"></div>
     </div>
   </div>
 </template>
