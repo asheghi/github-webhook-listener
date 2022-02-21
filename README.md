@@ -1,5 +1,4 @@
 # Github Webhook Listener
-
 ---
 a simple, light-weight web application that can be registered as a [GithubWebhook](https://developer.github.com/webhooks/)
 and execute shell commands in response to events.
@@ -13,13 +12,13 @@ installing and running application
 ```shell
 git clone https://github.com/semycolon/github-webhook-listener.git
 cd github-webhook-listener
+npm install
 
 // change authentication credentials inside .env file
 cp .env.sample .env
 
-npm install
-//single time running
-npm run start server:prod
+// single time running
+npm run server:prod
 
 //install pm2 to keep the app running
 npm i -g pm2
