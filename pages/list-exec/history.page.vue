@@ -59,7 +59,7 @@
             <a
                 class="hover:text-primary hover:underline  text-2xl pr-8"
                 :href="'/history/'+name+'/'+it.id">
-              {{ it.msg }}
+              {{ it.msg || 'no message' }}
             </a>
           </td>
           <td class="text-xs">
