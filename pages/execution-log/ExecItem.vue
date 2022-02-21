@@ -25,13 +25,13 @@
       <div class="py-4" v-if="(String(val.stdout) + String(val.stderr) + String(val.err)) === 'null'">
         <pre><code>no output</code></pre>
       </div>
-      <div class="stdout" v-if="val.stdout">
+      <div class="stdout py-4" v-if="val.stdout">
         <pre><code>{{ val.stdout }}</code></pre>
       </div>
-      <div class="stderr text-red-500" v-if="val.stderr">
+      <div class="stderr text-red-500 py-4" v-if="val.stderr">
         <pre><code>{{ val.stderr }}</code></pre>
       </div>
-      <div class="err text-red-700" v-if="val.err">
+      <div class="err text-red-700" py-4 v-if="val.err">
         <pre><code>{{ val.err }}</code></pre>
       </div>
       <div class="mb-4"></div>
