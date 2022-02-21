@@ -1,20 +1,9 @@
 <template>
-  <div class="min-h-screen p-8" v-if="data">
+  <div class="ExecDetailsPage min-h-screen p-8" v-if="data">
     <div class="text-xl mb-2">Execution History of {{ name }}</div>
-    <div class="mb-4">{{ data.date }}</div>
+    <div class="mb-4">{{ data.date }} {{fromNow}}</div>
     <div class="exec" v-for="(val,key) in data.exec">
-      <div class="text-lg font-bold">{{ key }}</div>
-      <div class="stdout" v-if="val.stdout">
-        <pre>
-          <code>{{ val.stdout }}</code>
-        </pre>
-      </div>
-      <div class="stderr text-red-500" v-if="val.stderr">
-        <pre><code>{{ val.stderr }}</code></pre>
-      </div>
-      <div class="err text-red-700" v-if="val.err">
-        <pre><code>{{ val.err }}</code></pre>
-      </div>
+      <ExecItem :cmd="key" :val="val"/>
     </div>
   </div>
 </template>
@@ -22,8 +11,11 @@
 <script>
 import {usePageContext} from "../../renderer/usePageContext";
 import {ax} from "../../lib/plugins/axios";
+import ExecItem from "./ExecItem.vue";
+import moment from "moment";
 
 export default {
+  components: {ExecItem},
   setup() {
     const {routeParams: {name, id}} = usePageContext()
     return {name, id};
@@ -37,16 +29,30 @@ export default {
     async fetchData() {
       const {data, status} = await ax.get('github/history/' + this.name + '/' + this.id);
       this.data = data;
+      if (data.status === 'running') {
+        setTimeout(() => {
+          this.fetchData()
+        },3000);
+      }
     }
   },
   data() {
     return {
       data: null,
     }
+  },
+  computed:{
+    fromNow(){
+      if (!this.data && this.data.time) return '';
+      return moment(this.data.time).fromNow()
+    }
   }
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+.ExecDetailsPage{
+  max-width: 768px;
+  @apply mx-auto;
+}
 </style>

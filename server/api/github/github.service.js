@@ -20,7 +20,7 @@ module.exports.GithubService = {
     db[name] = null;
     delete db[name];
   },
-  async onPush(name) {
+  async onPush({name,msg, extra}) {
     const repo = this.getRepositoryByName(name);
     const {working_dir: cwd, script} = repo;
     while (lock[name]){
@@ -30,7 +30,7 @@ module.exports.GithubService = {
     try {
       console.log('start exec');
       lock[name] = true;
-      await ExecService.execute(name, script, cwd);
+      await ExecService.execute({msg, name, script, cwd, extra});
     } catch (e) {
       console.error(e);
     } finally {
