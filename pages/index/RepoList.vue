@@ -1,5 +1,5 @@
 <template>
-  <div class="list-repos w-full">
+  <div class="list-repos space-y-4 w-full">
     <div class="repo flex gap-4" v-for="repo in repos" :key="repo.name">
       <div class="title mr-auto" v-text="repo.name"/>
       <div class="re-run" v-text="ReRun"></div>
@@ -38,7 +38,6 @@ export default {
 </script>
 <style lang="scss">
 .list-repos{
-  min-width: 400px;
   .repo{
     @apply text-xl py-1 rounded mb-2;
   }

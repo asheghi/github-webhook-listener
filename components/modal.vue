@@ -69,7 +69,7 @@ export default {
       @apply relative bg-white px-4 py-6 rounded-xl shadow-xl;
       max-height: 80vh;
       overflow-y: auto;
-      max-width: 80vw;
+      max-width: 90vw;
       overflow-x: auto;
     }
   ;

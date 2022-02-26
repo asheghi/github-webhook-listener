@@ -1,8 +1,8 @@
 <template>
   <div class="IndexPage min-h-screen flex flex-col pt-8 items-center gap-8">
-    <div class="top mb-4 flex items-center w-full">
-      <h1 class="mr-auto">Repositories</h1>
-      <button @click="showNewRepo" class="btn add-repo">
+    <div class="top mb-4 text-base md:text-lg flex items-center w-full flex-wrap whitespace-nowrap">
+      <h1 class="mr-auto font-extrabold tracking-wide uppercase">Repositories</h1>
+      <button @click="showNewRepo" class="btn add-repo text-primary">
         Add Repo
       </button>
     </div>
@@ -48,9 +48,8 @@ export default {
 </script>
 <style lang="scss">
 .IndexPage {
-  max-width: 500px;
-  min-width: 400px;
-  @apply mx-auto;
+  max-width: 600px;
+  @apply mx-auto px-4;
   .btn {
     @apply hover:text-white hover:bg-primary rounded transition px-2 py-1;
   }

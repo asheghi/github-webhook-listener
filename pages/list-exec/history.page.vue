@@ -8,10 +8,10 @@
       <input v-model="filter" type="text" placeholder="Filter ">
     </div>
     <div class="table-wrapper border border-gray-200 rounded-lg">
-      <table class="table-auto w-full">
+      <table class="table-auto w-full whitespace-nowrap">
         <thead class="bg-gray-100">
         <tr>
-          <td style="min-width: 200px">{{ list.length }} Executions</td>
+          <td style="">{{ list.length }} Executions</td>
           <td>Duration</td>
           <td class="">Date</td>
         </tr>
@@ -57,7 +57,7 @@
               </template>
             </div>
             <a
-                class="hover:text-primary hover:underline  text-2xl pr-8"
+                class="hover:text-primary hover:underline pr-4"
                 :href="'/history/'+name+'/'+it.id">
               {{ it.msg || 'no message' }}
             </a>
@@ -135,7 +135,7 @@ export default {
 
 <style lang="scss">
 .HistoryList {
-  @apply mx-auto py-8 flex flex-col gap-4;
+  @apply mx-auto px-4 py-8 flex flex-col gap-4;
   max-width: 600px;
 
   table {

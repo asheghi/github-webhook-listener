@@ -128,8 +128,7 @@ export default {
 <style lang="scss">
 .new-repo {
   @apply p-4;
-  min-width: 400px;
-  max-width: 500px;
+  max-width: 90vw;
   .delete{
     @apply transition rounded px-2 py-1 hover:text-white  text-red-400 hover:bg-red-500;
   }
@@ -141,7 +140,7 @@ export default {
     }
 
     input {
-      @apply w-full px-2 bg-gray-100 py-1 border rounded border-gray-300 ring-0 outline-primary;
+      @apply w-full outline-1 px-2 h-8 bg-gray-100 border rounded border-gray-300 ring-0 outline-primary;
     }
 
     .button {
